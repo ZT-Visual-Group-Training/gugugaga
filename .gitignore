@@ -37,4 +37,5 @@ desktop.ini
 *.zip
 *.rar
 *.7z
-*.log
+*.logbuild/
+.vscode/
