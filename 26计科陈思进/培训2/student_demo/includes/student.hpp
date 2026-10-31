@@ -3,13 +3,13 @@
 #define STUDENT_HPP
 
 #include <iostream>
-using namespace std;
+
 #include <string>
 //创建student类
 class Student {
 public:
 //类函数的声明（姓名，学号，分数）
-    Student(const string& name, int id, double score);
+    Student(const std::string& name,const std::string& id, double score);
 
 //打印信息
     void printInfo() const;
@@ -21,8 +21,8 @@ public:
     double getScore() const;
 
 private:
-    string name_;
-    int id_;
+   std::string name_;
+   std::string id_;
     double score_;
 };
 

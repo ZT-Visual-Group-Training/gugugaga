@@ -22,6 +22,7 @@ CTestTestfile.cmake
 # ---- IDE ----
 .vscode/
 .idea/
+.vs/
 *.sln
 *.vcxproj
 *.vcxproj.*

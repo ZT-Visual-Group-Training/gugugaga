@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.10)
 #给项目起名
 project(StudentDemo)
 
+#防止中文乱码
+if(MSVC)
+  add_compile_options(/utf-8)
+endif()
+
 #用c++标准来写代码
 set(CMAKE_CXX_STANDARD 11)
 

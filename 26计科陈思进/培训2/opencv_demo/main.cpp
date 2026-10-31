@@ -1,21 +1,22 @@
 ﻿#include <opencv2/opencv.hpp>   
 #include <iostream>
 using namespace std;
-int main() {
-    // 读取当前目录下的 test.jpg
-    cv::Mat image = cv::imread("test.jpg");
 
-    // 检查图片是否读取成功
+int main(int argc, char** argv) {
+    string imagePath = "test.jpg";
+    // 如果用户在命令行传了路径，就用用户传的
+    if (argc > 1) {
+        imagePath = argv[1];
+    }
+
+    cv::Mat image = cv::imread(imagePath);
+
     if (image.empty()) {
-       cerr << "错误：无法读取图片，请检查 test.jpg 是否在运行目录下。" << endl;
+        cerr << "错误：无法读取图片，请检查路径：" << imagePath << endl;
         return -1;
     }
 
-    // 创建一个窗口并显示图片
-    cv::imshow("显示图片", image);
-
-    // 等待用户按任意键，然后关闭窗口
-   // waitKey(0) 中的 0 表示无限等待
+    cv::imshow("Image Window", image);
     cv::waitKey(0);
     cv::destroyAllWindows();
 

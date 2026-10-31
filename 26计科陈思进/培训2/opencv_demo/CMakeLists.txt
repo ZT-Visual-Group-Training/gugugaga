@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 project(OpenCVDemo)
 
+#防止中文乱码
+if(MSVC)
+  add_compile_options(/utf-8)
+endif()
+
 # 设置 C++ 标准
 set(CMAKE_CXX_STANDARD 11)
 
