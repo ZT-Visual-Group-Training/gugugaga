@@ -1,10 +1,7 @@
 #include "student.hpp"
-Student::Student(std::string studentName, int studentId, double studentScore){
-    name = studentName;
-    id = studentId;
-    score = studentScore;
-}
-
+Student::Student(std::string studentName, const std::string& studentId, double studentScore)
+    : name(studentName), id(studentId),score(studentScore) {}
+  
 void Student::printInfo() const {
     std::cout << "---Student Info ---" << std::endl;
     std::cout << "Name:" << name <<std::endl;

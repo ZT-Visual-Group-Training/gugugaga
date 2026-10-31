@@ -7,11 +7,11 @@
 class Student {
 private:
     std::string name;
-    int id;
+    std::string id;
     double score;
 
 public:
-    Student(std::string studentName, int studentId, double studentScore);
+    Student(std::string studentName, const std::string& studentId, double studentScore);
     void printInfo() const;//print students'information
     
     void setScore(double newScore);//change score
