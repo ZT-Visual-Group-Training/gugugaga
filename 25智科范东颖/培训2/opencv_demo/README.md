@@ -9,7 +9,7 @@
 ```
 opencv_demo/
 ├── CMakeLists.txt   # CMake 构建脚本
-├── img.cpp          # 源码：imread 读图 + imshow 显示
+├── main.cpp         # 源码：imread 读图 + imshow 显示
 ├── test.png         # 测试图片
 └── README.md        # 本文件
 ```
@@ -33,16 +33,16 @@ cmake -S . -B build -DOpenCV_DIR="D:/opencv/build"
 cmake --build build --config Release
 ```
 
-编译成功后生成可执行文件：`build/Release/demo.exe`（单配置生成器则为 `build/demo.exe`）。
+编译成功后生成可执行文件：`build/Release/opencv_demo.exe`（单配置生成器则为 `build/opencv_demo.exe`）。
 
 ## 运行
 
-`img.cpp` 中使用的是相对路径 `imread("test.png")`，程序会在**当前工作目录**里找图片，因此需要把 `test.png` 和可执行文件放在同一目录，或从图片所在目录启动程序：
+`main.cpp` 中使用的是相对路径 `imread("test.png")`，程序会在**当前工作目录**里找图片，因此需要把 `test.png` 和可执行文件放在同一目录，或从图片所在目录启动程序：
 
 ```bat
 copy test.png build\Release\
 cd build\Release
-demo.exe
+opencv_demo.exe
 ```
 
 运行后弹出一个标题为 `Image` 的窗口，显示 `test.png` 的内容，按任意键关闭窗口。
@@ -65,12 +65,11 @@ int main()
     Mat img = imread("test.png");   // 读取图片到 Mat（内存矩阵）
     if (img.empty())                // 读取失败（路径错误/格式不支持）时返回空矩阵
     {
-        printf("图片读取失败，请检查 test.png 是否在当前工作目录\n");
+        std::cerr << "读取失败: test.png\n";
         return -1;
     }
     imshow("Image", img);           // 在名为 Image 的窗口中显示
     waitKey(0);                     // 等待按键，保持窗口不关闭
-    destroyAllWindows();            // 释放窗口资源
     return 0;
 }
 ```

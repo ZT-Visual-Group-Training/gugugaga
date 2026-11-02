@@ -3,23 +3,23 @@
 
 #include <map>
 #include <string>
-using namespace std;
+
 class Student {
 public:
 	Student();
-	Student(const string& id, const string& name);
+	Student(const std::string& id, const std::string& name);
 
-	const string& getId() const;
-	const string& getName() const;
+	const std::string& getId() const;
+	const std::string& getName() const;
 
-	void setName(const string& name);
-	void addScore(const string& subject, double score);
-	bool modifyScore(const string& subject, double score);
-	double getScore(const string& subject) const;
+	void setName(const std::string& name);
+	void addScore(const std::string& subject, double score);
+	bool modifyScore(const std::string& subject, double score);
+	double getScore(const std::string& subject) const;
 	void print() const;
 private:
-	string m_id;
-	string m_name;
-	std::map<string, double> m_scores;
+	std::string m_id;
+	std::string m_name;
+	std::map<std::string, double> m_scores;
 };
 #endif

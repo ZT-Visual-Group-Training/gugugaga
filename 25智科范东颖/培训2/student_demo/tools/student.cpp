@@ -1,6 +1,6 @@
 #include "student.hpp"
 #include <iostream>
-
+using namespace std;
 Student::Student() {}
 
 Student::Student(const string& id, const string& name)
