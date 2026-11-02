@@ -1,5 +1,6 @@
-# ---- 编译产物 ----
 build/
+.vscode/
+# ---- 编译产物 ----
 cmake-build-*/
 out/
 bin/
@@ -20,7 +21,6 @@ cmake_install.cmake
 CTestTestfile.cmake
 
 # ---- IDE ----
-.vscode/
 .idea/
 *.sln
 *.vcxproj
@@ -37,4 +37,5 @@ desktop.ini
 *.zip
 *.rar
 *.7z
-*.log
+*.logbuild/
+.vscode/
