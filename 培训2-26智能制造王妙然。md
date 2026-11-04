@@ -1,0 +1,81 @@
+# 第二周任务一：Student类
+**CMakeLists.txt**
+```cmake
+cmake_minimum_required(VERSION 3.10)
+project(StudentDemo)
+include_directories(includes)
+add_library(student STATIC tools/student.cpp)
+add_executable(main_app src/main.cpp)
+target_link_libraries(main_app student)
+```
+**student.hpp**
+```cpp
+#ifndef STUDENT_HPP
+#define STUDENT_HPP
+#include <string>
+
+class Student {
+private:
+    std::string name;
+    int score;
+public:
+    Student(std::string n, int s);
+    void printInfo();
+    void setScore(int s);
+};
+#endif
+```
+**student.cpp**
+```cpp
+#include "student.hpp"
+#include <iostream>
+
+Student::Student(std::string n, int s) : name(n), score(s) {}
+
+void Student::printInfo() {
+    std::cout << "姓名: " << name << ", 成绩: " << score << std::endl;
+}
+
+void Student::setScore(int s) {
+    score = s;
+}
+```
+**main.cpp**
+```cpp
+#include "student.hpp"
+
+int main() {
+    Student s1("张三", 90);
+    s1.printInfo();
+    s1.setScore(95);
+    s1.printInfo();
+    return 0;
+}
+```
+
+# 第二周任务二：OpenCV
+**CMakeLists.txt**
+```cmake
+cmake_minimum_required(VERSION 3.10)
+project(OpenCVDemo)
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+add_executable(opencv_app src/main_opencv.cpp)
+target_link_libraries(opencv_app ${OpenCV_LIBS})
+```
+**main_opencv.cpp**
+```cpp
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+int main() {
+    cv::Mat img = cv::imread("test.jpg");
+    if (img.empty()) {
+        std::cout << "无法读取图片，请检查路径！" << std::endl;
+        return -1;
+    }
+    cv::imshow("OpenCV Test", img);
+    cv::waitKey(0);
+    return 0;
+}
+```
