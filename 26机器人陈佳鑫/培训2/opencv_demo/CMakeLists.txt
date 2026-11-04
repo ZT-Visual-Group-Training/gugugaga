@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.11)
+project(opencv_demo)
+find_package(OpenCV REQUIRED)
+add_executable(OPENCV_DEMO src/main.cpp)
+target_link_libraries(OPENCV_DEMO ${OpenCV_LIBS})
