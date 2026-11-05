@@ -141,16 +141,16 @@ void drawArmorBox(Mat& img, RotatedRect leftBar, RotatedRect rightBar)
     leftBar.points(leftPts); 
     rightBar.points(rightPts);
 
-    // 1. 画小框 (红色)
+    // 1. 画小框 (黄色)
     for (int j = 0; j < 4; j++) {
-        line(img, leftPts[j], leftPts[(j + 1) % 4], Scalar(0, 0, 255), 2);
-        line(img, rightPts[j], rightPts[(j + 1) % 4], Scalar(0, 0, 255), 2);
+        line(img, leftPts[j], leftPts[(j + 1) % 4], Scalar(0, 255, 255), 2);
+        line(img, rightPts[j], rightPts[(j + 1) % 4], Scalar(0, 255, 255), 2);
     }
 
-    // 2. 在图像上显示灯条的四个角点 (每个灯条的4个点都画出来，绿色圆点)
+    // 2. 在图像上显示灯条的四个角点 (每个灯条的4个点都画出来，黄色圆点)
     for(int j = 0; j < 4; j++) {
-        circle(img, leftPts[j], 3, Scalar(0, 255, 0), -1);
-        circle(img, rightPts[j], 3, Scalar(0, 255, 0), -1);
+        circle(img, leftPts[j], 3, Scalar(0, 255, 255), -1);
+        circle(img, rightPts[j], 3, Scalar(0, 255, 255), -1);
     }
 
     // 3. 计算“包住整体的大框”的四个角点
@@ -164,16 +164,35 @@ void drawArmorBox(Mat& img, RotatedRect leftBar, RotatedRect rightBar)
     Point2f armorRT = rightPts[0].y < rightPts[1].y ? rightPts[0] : rightPts[1]; // 整体右上
     Point2f armorRB = rightPts[0].y > rightPts[1].y ? rightPts[0] : rightPts[1]; // 整体右下
 
-    // 4. 连接大框的四个角点，把整个装甲板框出来 (黄色)
-    Scalar armorColor(0, 255, 255); 
-    line(img, armorLT, armorRT, armorColor, 3); // 上边
-    line(img, armorRT, armorRB, armorColor, 3); // 右边
-    line(img, armorRB, armorLB, armorColor, 3); // 下边
-    line(img, armorLB, armorLT, armorColor, 3); // 左边
+    // 4. 连接大框的四个角点，把整个装甲板框出来 (绿色)
+    Scalar armorColor(0, 255, 0); 
+    line(img, armorLT, armorRT, armorColor, 1); // 上边
+    line(img, armorRT, armorRB, armorColor, 1); // 右边
+    line(img, armorRB, armorLB, armorColor, 1); // 下边
+    line(img, armorLB, armorLT, armorColor, 1); // 左边
 
     // 5. 标出大框的4个角点 (黄色实心圆)
     circle(img, armorLT, 4, armorColor, -1);
     circle(img, armorRT, 4, armorColor, -1);
     circle(img, armorRB, 4, armorColor, -1);
     circle(img, armorLB, 4, armorColor, -1);
+
+       // ================= 新增：添加 P1-P4 文字标记 =================
+    // 设置文字参数：字体、缩放比例、颜色(绿色)、线宽
+    int fontFace = FONT_HERSHEY_SIMPLEX;
+    double fontScale = 0.5;
+    int thickness = 1;
+    
+    // P1 标记 (左上角)：文字向右上偏移，避免遮挡圆点
+    putText(img, "P1", Point(armorLT.x + 5, armorLT.y - 5), fontFace, fontScale, armorColor, thickness);
+    
+    // P2 标记 (右上角)
+    putText(img, "P2", Point(armorRT.x + 5, armorRT.y - 5), fontFace, fontScale, armorColor, thickness);
+    
+    // P3 标记 (右下角)
+    putText(img, "P3", Point(armorRB.x + 5, armorRB.y + 15), fontFace, fontScale, armorColor, thickness);
+    
+    // P4 标记 (左下角)
+    putText(img, "P4", Point(armorLB.x - 25, armorLB.y + 15), fontFace, fontScale, armorColor, thickness);
+
 }
