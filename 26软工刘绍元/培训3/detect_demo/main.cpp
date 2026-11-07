@@ -101,11 +101,15 @@ std::vector<Armor> matchLights(const std::vector<Light>& lights) {
 void drawResult(cv::Mat& image, const std::vector<Light>& lights,
                 const std::vector<Armor>& armors) {
     for (const auto& light : lights) {
-        const auto& p = light.corners;
-        const std::array<int, 4> order = {0, 1, 3, 2};
-        for (int k = 0; k < 4; ++k) {
-            cv::line(image, p[order[k]], p[order[(k + 1) % 4]], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
-            cv::circle(image, p[k], 3, cv::Scalar(255, 255, 0), -1, cv::LINE_AA);
+        cv::Rect box = cv::boundingRect(std::vector<cv::Point2f>(
+            light.corners.begin(), light.corners.end()));
+        std::array<cv::Point, 4> points = {
+            box.tl(), cv::Point(box.x + box.width - 1, box.y),
+            box.br() - cv::Point(1, 1), cv::Point(box.x, box.y + box.height - 1)
+        };
+        cv::rectangle(image, box, cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
+        for (const auto& point : points) {
+            cv::circle(image, point, 3, cv::Scalar(255, 255, 0), -1, cv::LINE_AA);
         }
     }
     for (const auto& armor : armors) {
