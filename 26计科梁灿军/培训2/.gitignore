@@ -1,0 +1,17 @@
+# 构建产物
+build/
+build_*/
+
+# 编译中间文件
+*.o
+*.obj
+*.a
+*.so
+
+# 可执行文件
+*.exe
+
+# 编辑器 / 系统杂项
+.vscode/
+*.swp
+.DS_Store
