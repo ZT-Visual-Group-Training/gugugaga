@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.10)
+project(ArmorDetection LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Default to the OpenCV used by this course. Override with:
+#   cmake -DOpenCV_DIR=D:/opencv ...
+if(NOT OpenCV_DIR AND EXISTS "C:/opencv_mingw/OpenCVConfig.cmake")
+    set(OpenCV_DIR "C:/opencv_mingw")
+endif()
+
+find_package(OpenCV REQUIRED)
+message(STATUS "OpenCV ${OpenCV_VERSION} from ${OpenCV_DIR}")
+
+add_executable(armor_hw main.cpp)
+target_link_libraries(armor_hw PRIVATE ${OpenCV_LIBS})
