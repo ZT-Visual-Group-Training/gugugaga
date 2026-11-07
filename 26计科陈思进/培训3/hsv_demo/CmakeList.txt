@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.16)
+project(hsv_demo LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+find_package(OpenCV REQUIRED)
+
+
+add_executable(hsv_demo task1_hsv.cpp)
+target_include_directories(hsv_demo PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(hsv_demo PRIVATE ${OpenCV_LIBS})
