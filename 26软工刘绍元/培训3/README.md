@@ -1,6 +1,5 @@
 # 培训3
 
-用 C++17 和 OpenCV 完成两个任务。
 
 ## HSV 与红色掩膜
 
@@ -37,7 +36,6 @@ cmake --build build -j4
 ./build/detect_demo test_clip.mp4 result.mp4 --no-show
 ```
 
-测试视频为群里提供的 19 秒片段，共 570 帧。
 
 ![识别效果](shots/detection.jpg)
 
