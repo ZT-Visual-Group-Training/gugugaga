@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(student_demo)
+include_directories(includes)
+add_library(Student STATIC tools/student.cpp)
+add_executable(student_demo src/main.cpp)
+target_link_libraries(student_demo Student)
