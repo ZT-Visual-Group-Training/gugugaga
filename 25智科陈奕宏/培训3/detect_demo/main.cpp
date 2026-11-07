@@ -6,7 +6,7 @@
 //     - 结果写成 mp4，作为培训三的示例视频。
 //
 // 用法：
-//   task2_video --video assets/train3.mp4 --out outputs/train3_demo.mp4
+//   detect_demo --video assets/train3.mp4 --out outputs/train3_demo.mp4
 //                [--dump-every 60] [--no-connect-corners] [--hud] [--mask-inset] [--show]
 
 #include <opencv2/opencv.hpp>
@@ -38,7 +38,7 @@ const std::vector<std::size_t> kQuadOrder = {0, 2, 3, 1};
 
 void usage()
 {
-  std::cout << "usage: task2_video --video <input.mp4> [--out <output.mp4>] [--dump-every N]\n"
+  std::cout << "usage: detect_demo --video <input.mp4> [--out <output.mp4>] [--dump-every N]\n"
                "                   [--no-connect-corners] [--hud] [--stats] [--mask-inset]\n"
                "                   [--rotated-outline] [--show] [--gray-thresh 150]\n";
 }
@@ -291,7 +291,8 @@ int main(int argc, char ** argv)
     std::vector<train3::Lightbar> lightbars;
     std::vector<train3::Armor> armors;
     detector.detect(frame, lightbars, armors);
-    auto mask = detector.mask(frame);
+    cv::Mat mask;
+    if (mask_inset) mask = detector.mask(frame);  // 调试小窗需要时才重复计算掩膜
 
     cv::Mat canvas = frame.clone();
 

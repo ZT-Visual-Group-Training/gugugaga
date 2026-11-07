@@ -5,8 +5,8 @@
 //   4. 把掩膜保存为 red_mask.png。
 //
 // 用法：
-//   task1_hsv --image assets/armor.jpg --out outputs          （只保存图片）
-//   task1_hsv --image assets/armor.jpg --out outputs --show   （同时弹出窗口）
+//   hsv_demo --image assets/armor.jpg --out outputs          （只保存图片）
+//   hsv_demo --image assets/armor.jpg --out outputs --show   （同时弹出窗口）
 
 #include <opencv2/opencv.hpp>
 
@@ -21,7 +21,7 @@
 #include <utility>
 #include <vector>
 
-#include "detector.hpp"
+#include "red_mask.hpp"
 
 namespace fs = std::filesystem;
 
@@ -30,8 +30,9 @@ namespace
 
 void usage()
 {
-  std::cout << "usage: task1_hsv --image <armor image> [--out <dir>] [--show]\n"
-               "                [--h1 0 10] [--h2 170 180] [--s 100] [--v 70]\n";
+  std::cout << "usage: hsv_demo --image <armor image> [--out <dir>] [--show]\n"
+               "                [--h1 0 10] [--h2 170 180] [--s 100] [--v 70]\n"
+               "                [--red-excess 30] [--min-component-area 6]\n";
 }
 
 // 保存图片：OpenCV 的 imwrite 不支持中文路径，这里用 imencode + ofstream
@@ -95,7 +96,7 @@ int main(int argc, char ** argv)
   std::string image_path = "assets/armor.jpg";
   std::string out_dir = "outputs";
   bool show = false;
-  train3::DetectConfig cfg;
+  train3::RedMaskConfig cfg;
 
   for (int i = 1; i < argc; ++i) {
     std::string arg = argv[i];
@@ -123,6 +124,12 @@ int main(int argc, char ** argv)
       ++i;
     } else if (arg == "--v" && i + 1 < argc) {
       cfg.v_min = std::stoi(next(1));
+      ++i;
+    } else if (arg == "--red-excess" && i + 1 < argc) {
+      cfg.red_excess_min = std::stoi(next(1));
+      ++i;
+    } else if (arg == "--min-component-area" && i + 1 < argc) {
+      cfg.min_component_area = std::stoi(next(1));
       ++i;
     } else if (arg == "--help" || arg == "-h") {
       usage();
@@ -155,25 +162,13 @@ int main(int argc, char ** argv)
   write_image(fs::path(out_dir) / "S_channel.png", titled(s_channel, "S channel (saturation)"));
   write_image(fs::path(out_dir) / "V_channel.png", titled(v_channel, "V channel (brightness)"));
 
-  // 3. 写阈值，inRange 提取红色装甲二值掩膜
-  cv::Mat mask_low, mask_high, red_mask;
-  cv::inRange(
-    hsv_img, cv::Scalar(cfg.h_low_min, cfg.s_min, cfg.v_min), cv::Scalar(cfg.h_low_max, 255, 255),
-    mask_low);
-  cv::inRange(
-    hsv_img, cv::Scalar(cfg.h_high_min, cfg.s_min, cfg.v_min),
-    cv::Scalar(cfg.h_high_max, 255, 255), mask_high);
-  cv::bitwise_or(mask_low, mask_high, red_mask);  // 红色跨越 0 度，两段色相合并
-
-  if (cfg.morph_kernel > 0) {
-    auto kernel = cv::getStructuringElement(
-      cv::MORPH_RECT, cv::Size(cfg.morph_kernel, cfg.morph_kernel));
-    cv::morphologyEx(red_mask, red_mask, cv::MORPH_CLOSE, kernel);
-  }
+  // 3. 共用颜色判据：双区间 HSV + 红色优势 + 闭运算 + 小连通域过滤
+  cv::Mat red_mask = train3::make_red_mask(bgr_img, cfg);
 
   std::cout << "[task1] red threshold: H[" << cfg.h_low_min << "," << cfg.h_low_max << "] U ["
             << cfg.h_high_min << "," << cfg.h_high_max << "]  S>=" << cfg.s_min
-            << "  V>=" << cfg.v_min << "\n";
+            << "  V>=" << cfg.v_min << "  R-max(G,B)>=" << cfg.red_excess_min
+            << "  min area=" << cfg.min_component_area << "\n";
 
   // 4. 保存掩膜
   const auto mask_path = fs::path(out_dir) / "red_mask.png";
